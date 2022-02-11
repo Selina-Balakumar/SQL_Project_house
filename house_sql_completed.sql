@@ -23,13 +23,13 @@ Alter table House.dbo.HousingData
 drop Column DateConvert
 
 select * from house.dbo.HousingData
----Populate the property address and identify null values
+--- Identifying null values
 select PropertyAddress from house.dbo.HousingData
 where PropertyAddress is null
 order by ParcelId
 
 
-
+---using a self join to populate the address where null values are present
 select a.ParcelID,a.PropertyAddress,b.ParcelID,b.PropertyAddress,Isnull(a.PropertyAddress,b.PropertyAddress)
 from house.dbo.HousingData a
  join house.dbo.HousingData b
@@ -38,7 +38,7 @@ and a.UniqueId<>b.UniqueID
 where a.PropertyAddress is null
 
 Update a
-set a.PropertyAddress=Isnull(a.PropertyAddress,b.PropertyAddress)
+set PropertyAddress=Isnull(a.PropertyAddress,b.PropertyAddress)
 from house.dbo.HousingData a
  join house.dbo.HousingData b
 on a.ParcelId=b.ParcelId
