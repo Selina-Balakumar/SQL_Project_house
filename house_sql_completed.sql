@@ -73,7 +73,7 @@ set SplitCity=substring(PropertyAddress,CHARINDEX(',',PropertyAddress)+1,Len(Pro
 select * from house.dbo.HousingData
 
 select 
-PARSENAME(REplace(Owneraddress,',','.'),3) as Address,
+PARSENAME(Replace(Owneraddress,',','.'),3) as Address,
 PARSENAME(Replace(OwnerAddress,',','.'),2) as City,
 PARSENAME(Replace(OwnerAddress,',','.'),1)as State
 from house.dbo.HousingData
@@ -82,14 +82,14 @@ Alter table house.dbo.HousingData
 add OwnStreet varchar(120)
 
 Update house.dbo.HousingData
-set OwnStreet=PARSENAME(REplace(Owneraddress,',','.'),3)
+set OwnStreet=PARSENAME(Replace(Owneraddress,',','.'),3)
 
 
 Alter table house.dbo.HousingData
 add OwnCity varchar(120)
 
 Update house.dbo.HousingData
-set OwnCity=ParseName(REplace(Owneraddress,',','.'),2)
+set OwnCity=ParseName(Replace(Owneraddress,',','.'),2)
 
 Alter table house.dbo.HousingData
 add OwnState varchar(120)
