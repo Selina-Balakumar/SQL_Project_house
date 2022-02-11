@@ -23,9 +23,11 @@ Alter table House.dbo.HousingData
 drop Column DateConvert
 
 select * from house.dbo.HousingData
----Populate the property address
-select * from house.dbo.HousingData
+---Populate the property address and identify null values
+select PropertyAddress from house.dbo.HousingData
+where PropertyAddress is null
 order by ParcelId
+
 
 
 select a.ParcelID,a.PropertyAddress,b.ParcelID,b.PropertyAddress,Isnull(a.PropertyAddress,b.PropertyAddress)
