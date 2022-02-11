@@ -126,8 +126,6 @@ set SoldAsVacant=case when SoldAsVacant='Y' then 'Yes'
 						 end
 
 
-Alter table house.dbo.HousingData
-drop column OwnAddress
 
 select * from house.dbo.HousingData
 
