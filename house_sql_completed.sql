@@ -181,12 +181,12 @@ Order by avg_Price desc
 
 --Which year has lowest no of sales?
 
-Select ConvertDate,Count(SaleDate) as Sale_Count,Sum(SalePrice) as Price_sum
+Select year(ConvertDate) as year,Count(SaleDate) as Sale_Count,Sum(SalePrice) as Price_sum
 from house.dbo.HousingData
-group by ConvertDate
+group by year(ConvertDate)
 order by 2
 
---Which Year has most sales in a year?
+--Which Year has max sale price in a year?
 select year(ConvertDate) as year,count(SalePrice) as SaleCount,sum(SalePrice) as TotalSalePrice 
 from house.dbo.HousingData
 Group by year(ConvertDate)
