@@ -209,23 +209,12 @@ Order by 2
 --Distinct  Cities in the Table
 select distinct SplitCity from  house.dbo.HousingData 
 
---Cities with the highest average price per sale
+--Top 5 cities Cities with the highest average price per sale
 select top 5 SplitCity,Round(avg(SalePrice),2) AvgSalePrice,Count(SaleDate) NoOfSales
 from  house.dbo.HousingData 
 group by  SplitCity
 order by 2 desc
  
---Select top 5 Cities by price in each year using windows function
-
-
-select year(ConvertDate) as year,max(SalePrice) as MostSales
-from house.dbo.HousingData
-where year(ConvertDate)='2015'
-group by month(ConvertDate)
-Order by 2 desc
-
-select * from house.dbo.HousingData
-
 
 --select top 5 Cities by price in each year using windows function
 --windows function (window function can perform an aggregation based on the partition and 
@@ -233,30 +222,29 @@ select * from house.dbo.HousingData
 --aggregate using Over()
 --the OVER clause that makes an aggregate a SQL window function
 
-select  SplitCity,year(SaleDate) as Years,sum(SalePrice) as SaleP
+select  top 5 SplitCity,year(SaleDate) as Years,sum(SalePrice) as SalePrice
 from house.dbo.HousingData
 group by year(SaleDate),SplitCity
 order by 2 
 
---get the ranking of the total price by each year
-select SplitCity,Years, SaleP,ROW_NUMBER() over(Partition by Years order by SaleP desc) as ranking from
-(
-select  SplitCity,year(SaleDate) as Years,sum(SalePrice) as SaleP
+--Get the ranking of the total price by each year
+select SplitCity,year(SaleDate) as YearSale,sum(SalePrice) as SumP,
+ROW_NUMBER() over(Partition by year(SaleDate) order by sum(SalePrice) desc) as ranking 
 from house.dbo.HousingData
-group by year(SaleDate),SplitCity)a
+group by year(SaleDate),SplitCity
 
 -- select all records with ranking smaller than or equal to 5
-select Years,SplitCity,SaleP,ranking from
+with cte as
 (
-select  Years,SplitCity,SaleP,ROW_NUMBER() over(Partition by Years order by SaleP desc) as ranking
-from(select  SplitCity,year(SaleDate) as Years,sum(SalePrice) as SaleP
+select  year(SaleDate) as Years,SplitCity,sum(SalePrice) as SaleP,
+ROW_NUMBER() over(Partition by year(SaleDate) order by sum(SalePrice) desc) as ranking
 from house.dbo.HousingData
-group by year(SaleDate),SplitCity) a
-)b
-where ranking<=5
+group by year(SaleDate),SplitCity
+)
+select Years,SplitCity,SaleP,ranking from cte where ranking <= 5
 order by Years,ranking
 
-
+--select Distinct Bedrooms 
 select distinct Bedrooms from house.dbo.HousingData
 order by Bedrooms
 
